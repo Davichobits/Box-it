@@ -5,12 +5,11 @@ interface IMakeInstance {
   color: string,
   x: number,
   y: number,
-  z: number,
   depth: number,
   rounded: boolean,
   scene: THREE.Scene
 }
-export function makeInstance( {color, x, y,z, depth, rounded=false, scene}:IMakeInstance) : THREE.Mesh {
+export function makeInstance( {color, x, y, depth, rounded=false, scene}:IMakeInstance) : THREE.Mesh {
   let geometry;
   if(rounded){
     geometry = new RoundedBoxGeometry(1, 1, depth);

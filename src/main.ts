@@ -36,7 +36,7 @@ const gameMatrix = [
 let cubes: THREE.Mesh[] = [];
 let xPosition = 0;
 let yPosition = 0;
-let zPosition = 0;
+// let zPosition = 0;
 let depth = 1;
 let rounded = false;
 gameMatrix.forEach(row=>{
@@ -55,16 +55,15 @@ gameMatrix.forEach(row=>{
     }else{
       depth = 1
     }
-    if(box === 1){
-      zPosition = 0;
-    }else{
-      zPosition = -2;
-    }
+    // if(box === 1){
+    //   zPosition = 0;
+    // }else{
+    //   zPosition = -2;
+    // }
     const cube = makeInstance( {
       color: boxColors[box], 
       x: xPosition, 
       y: yPosition, 
-      z: 0,
       depth: depth,
       rounded: rounded,
       scene:scene,
@@ -87,14 +86,12 @@ scene.add(ambientLight);
 function render(time:number){
   time *=0.001;
   
-  cubes.forEach((cube, ndx)=>{
-    const speed = 1 + ndx * .1;
-    const rot = time * speed;
-    // cube.rotation.x = rot;
-    // cube.rotation.y = rot;
-  });
-
-  console.log(camera);
+  // cubes.forEach((cube, ndx)=>{
+  //   const speed = 1 + ndx * .1;
+  //   const rot = time * speed;
+  //   cube.rotation.x = rot;
+  //   cube.rotation.y = rot;
+  // });
   renderer.render(scene, camera);
   requestAnimationFrame(render);
 }
