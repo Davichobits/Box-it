@@ -1,21 +1,16 @@
 import * as THREE from 'three';
-import { RoundedBoxGeometry } from 'three/examples/jsm/Addons.js';
 
 interface IMakeInstance {
   color: string,
   x: number,
   y: number,
+  z?: number,
   depth: number,
-  rounded: boolean,
   scene: THREE.Scene
 }
-export function makeInstance( {color, x, y, depth, rounded=false, scene}:IMakeInstance) : THREE.Mesh {
+export function makeInstance( {color, x, y, z = 0, depth, scene}:IMakeInstance) : THREE.Mesh {
   let geometry;
-  if(rounded){
-    geometry = new RoundedBoxGeometry(1, 1, depth);
-  }else{
-    geometry = new THREE.BoxGeometry(1, 1, depth);
-  }
+  geometry = new THREE.BoxGeometry(1, 1, depth);
   const material = new THREE.MeshPhongMaterial({color});
 
   const cube = new THREE.Mesh(geometry, material);
@@ -23,6 +18,6 @@ export function makeInstance( {color, x, y, depth, rounded=false, scene}:IMakeIn
 
   cube.position.x = x;
   cube.position.y = y;
-  cube.position.z= depth / 2;
+  cube.position.z= depth / 2 + z;
   return cube;
 }

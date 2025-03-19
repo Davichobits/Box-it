@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
-import { makeInstance } from './makeInstance';
 import { Renderer } from './components/Renderer';
 import { Camera } from './components/Camera';
 import { boxColors } from './constants';
 import { drawAxes } from './helpers/drawAxes';
+import { Box } from './components/Box';
 
 const renderer = Renderer();
 document.body.appendChild(renderer.domElement);
@@ -20,8 +20,6 @@ new OrbitControls(camera, renderer.domElement);
 const scene = new THREE.Scene();
 drawAxes(scene);
 
-// scene.add(axes);
-
 const gameMatrix = [
   [3,3,3,3,3,3,3],
   [3,0,0,0,0,0,3],
@@ -30,46 +28,44 @@ const gameMatrix = [
   [3,3,3,0,2,0,3],
   [3,4,0,0,0,0,3],
   [3,3,3,3,3,3,3],
-
 ];
 
 let cubes: THREE.Mesh[] = [];
 let xPosition = 0;
 let yPosition = 0;
 // let zPosition = 0;
-let depth = 1;
-let rounded = false;
-gameMatrix.forEach(row=>{
+
+gameMatrix.forEach(row => {
   yPosition -= 1;
   xPosition = 0;
-  row.forEach(box=>{
+  row.forEach(box => {
     xPosition += 1;
 
-    if(box === 1 || box === 2){
-      rounded = true;
-    }else{
-      rounded = false;
+    // Dibujar suelo (ground) si no es una meta (Goal)
+    if (box !== 4) {
+      const groundCube = new Box({
+        color: boxColors[0], 
+        x: xPosition, 
+        y: yPosition, 
+        depth: 0.1,
+        scene: scene,
+      });
+      cubes.push(groundCube);
     }
-    if(box === 1 || box === 2 || box === 3){
-      depth = 2
-    }else{
-      depth = 1
-    }
-    // if(box === 1){
-    //   zPosition = 0;
-    // }else{
-    //   zPosition = -2;
-    // }
-    const cube = makeInstance( {
-      color: boxColors[box], 
-      x: xPosition, 
-      y: yPosition, 
-      depth: depth,
-      rounded: rounded,
-      scene:scene,
-    });
 
-    cubes.push(cube);
+    // Dibujar paredes si no es suelo (0) ni meta (4)
+    if (box !== 0 && box !== 4) {
+      const wallCube = new Box({
+        color: boxColors[box], 
+        x: xPosition, 
+        y: yPosition, 
+        z: 0.1,
+        depth: 1,
+        scene: scene,
+      });
+      cubes.push(wallCube);
+    }
+  
   });
 });
 
