@@ -30,10 +30,11 @@ const gameMatrix = [
   [3,3,3,3,3,3,3],
 ];
 
-let cubes: THREE.Mesh[] = [];
+let cubes: Box[] = [];
 let xPosition = 0;
 let yPosition = 0;
 // let zPosition = 0;
+let player: Box;
 
 gameMatrix.forEach(row => {
   yPosition -= 1;
@@ -53,8 +54,8 @@ gameMatrix.forEach(row => {
       cubes.push(groundCube);
     }
 
-    // Dibujar paredes si no es suelo (0) ni meta (4)
-    if (box !== 0 && box !== 4) {
+    // Draw Walls
+    if (box === 3 ) {
       const wallCube = new Box({
         color: boxColors[box], 
         x: xPosition, 
@@ -64,6 +65,24 @@ gameMatrix.forEach(row => {
         scene: scene,
       });
       cubes.push(wallCube);
+    }
+
+    // Draw Player
+    if (box === 1) {
+      player = new Box({
+        color: boxColors[box], 
+        x: xPosition, 
+        y: yPosition,
+        z: 1,
+        velocity:{
+          x: 0,
+          y: 0,
+          z: -0.01
+        }, 
+        depth: 1,
+        scene: scene,
+      });
+      cubes.push(player);
     }
   
   });
@@ -88,6 +107,7 @@ function render(time:number){
   //   cube.rotation.x = rot;
   //   cube.rotation.y = rot;
   // });
+  player.update();
   renderer.render(scene, camera);
   requestAnimationFrame(render);
 }
